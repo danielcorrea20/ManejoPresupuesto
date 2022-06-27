@@ -52,6 +52,21 @@ namespace ManejoPresupuesto.Controllers
 
         }
 
+        public async Task<IActionResult> Editar(int id)
+        {
+            var usurarioId = servicioUsuarios.ObtenerUsuarioId();
+            var cuenta = await repositorioCuentas.ObtenerPorId(id, usurarioId);
+          
+            if (cuenta is null)
+            {
+                return RedirectToAction("NoEncontrado", "Home");
+
+            }
+
+            // ARMAR EL MODELO
+
+        }
+
         [HttpPost]
         public async Task<IActionResult> Crear (CuentaCreacionViewModel Cuenta)
         {

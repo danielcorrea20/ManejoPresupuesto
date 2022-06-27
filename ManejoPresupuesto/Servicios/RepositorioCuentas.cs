@@ -9,6 +9,7 @@ namespace ManejoPresupuesto.Servicios
     {
         Task<IEnumerable<Cuenta>> Buscar(int usuarioId);
         Task crear(Cuenta cuenta);
+        Task<Cuenta> ObtenerPorId(int id, int usuarioId);
     }
 
 
@@ -43,6 +44,17 @@ namespace ManejoPresupuesto.Servicios
                                                         on tc .Id = Cuentas.TipoDeCuentaId
                                                         where tc.UsuarioId = @UsuarioId
                                                         order by tc.Orden", new { usuarioId });
+        }
+
+        public async Task<Cuenta> ObtenerPorId(int id, int usuarioId)
+        {
+            using var connection= new SqlConnection(connectionstring);
+            return await connection.QueryFirstOrDefaultAsync<Cuenta>(
+                @"select Cuentas.Id, Cuentas.Nombre, Balance, Descripcion, tc.Id
+                                                        inner join TiposCuentas Tc
+                                                        on tc .Id = Cuentas.TipoDeCuentaId
+                                                        where tc.UsuarioId = @UsuarioId and Cuentas.Id=@Id", new { id, usuarioId } );
+
         }
     }
 
