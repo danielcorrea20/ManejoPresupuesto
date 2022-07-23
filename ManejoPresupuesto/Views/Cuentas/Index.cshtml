@@ -80,11 +80,11 @@
                             <li class="list-group-item">
                                 <span>
                                     <strong>@cuenta.Nombre</strong>
-                                    <a class= "btn-primary btn">
+                                    <a asp-action="Editar" asp-route-Id="@cuenta.Id" class= "btn-primary btn">
                                         <i class="bi-pencil-fill"></i>
                                     </a>
 
-                                     <a class= "btn-danger btn">
+                                     <a asp-action="Borrar" asp-route-id="@cuenta.Id"   class= "btn-danger btn">
                                         <i class="bi-trash-fill"></i>
                                     </a>
 
