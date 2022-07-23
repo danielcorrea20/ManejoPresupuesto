@@ -49,7 +49,7 @@ namespace ManejoPresupuesto.Servicios
         public async Task<Transaccion> ObtenerPorId(int id, int usuarioId)
         {
             using var connection = new SqlConnection(connectionstring);
-            return await connection.QueryFirstOrDefault<Transaccion>(@"select Transaciones. *, cat.TipoOperacionId
+            return await connection.QueryFirstOrDefaultAsync<Transaccion>(@"select Transaciones. *, cat.TipoOperacionId
                                                 from Transaciones
                                                 inner join Categorias cat
                                                 on cat.Id = Transaciones.CategoriaId
