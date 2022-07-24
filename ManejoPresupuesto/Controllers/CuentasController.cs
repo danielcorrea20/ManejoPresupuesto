@@ -123,7 +123,7 @@ namespace ManejoPresupuesto.Controllers
         public async Task<IActionResult> Borrar(int id)
         {
             var usuarioId = servicioUsuarios.ObtenerUsuarioId();
-            var cuenta = await repositorioTiposCuentas.ObtenerPorId(id, usuarioId);
+            var cuenta = await repositorioCuentas.ObtenerPorId(id, usuarioId);
             
             if (cuenta is null)
             {
@@ -136,7 +136,7 @@ namespace ManejoPresupuesto.Controllers
         public async Task<IActionResult> BorrarCuenta(int id)
         {
             var usuarioId = servicioUsuarios.ObtenerUsuarioId();
-            var cuenta = await repositorioTiposCuentas.ObtenerPorId(id, usuarioId);
+            var cuenta = await repositorioCuentas.ObtenerPorId(id, usuarioId);
 
             if (cuenta is null)
             {

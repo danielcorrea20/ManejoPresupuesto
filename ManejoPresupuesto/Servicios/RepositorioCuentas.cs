@@ -67,8 +67,8 @@ namespace ManejoPresupuesto.Servicios
             using var connection = new SqlConnection(connectionstring);
 
             await connection.ExecuteAsync(@"update Cuentas
-            set Nombre=@Nombre, Balance=@Balance, Descripcion=@Descripcion
-            TipoCuentaId=@TipoCuentaId
+            set Nombre=@Nombre, Balance=@Balance, Descripcion=@Descripcion,
+            tipodecuentaId=@TipoDeCuentaId
             where Id=@Id;", cuenta);
         }
 

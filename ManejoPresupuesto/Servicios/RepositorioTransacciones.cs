@@ -9,6 +9,7 @@ namespace ManejoPresupuesto.Servicios
         Task Actualizar(Transaccion transaccion, decimal montoAnterior, int cuentaAnterior);
         Task Crear(Transaccion transaccion);
         Task<Transaccion> ObtenerPorId(int id, int usuarioId);
+        Task Borrar(int id);
     }
     public class RepositorioTransacciones: IRepositorioTransacciones
     {
@@ -54,6 +55,11 @@ namespace ManejoPresupuesto.Servicios
                                                 inner join Categorias cat
                                                 on cat.Id = Transaciones.CategoriaId
                                                 where Transaciones.Id = @Id and Transaciones.UsuarioId = @UsuarioId");
-        }   
+        }
+
+        public Task Borrar(int id)
+        {
+            return null;
+        }
     }
 }

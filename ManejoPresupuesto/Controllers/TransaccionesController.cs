@@ -86,7 +86,7 @@ namespace ManejoPresupuesto.Controllers
                 return RedirectToAction("NoEncontrado", "Home");
             }
 
-            //await repositorioTransacciones.Borrar(id);
+            await repositorioTransacciones.Borrar(id);
             return RedirectToAction("Index");
         }
 

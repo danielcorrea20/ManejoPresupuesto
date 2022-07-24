@@ -34,7 +34,7 @@
 
     <div class="mb-3">
         <label asp-for="CategoriaId" class="form-label"></label>
-        <select asp-for="CategoriaId"   class="form-select"></select>
+        <select asp-for="CategoriaId" asp-items="Model.Categorias"  class="form-select"></select>
         <span asp-validation-for="CategoriaId" class="text-danger"></span>
 
     </div>
@@ -69,25 +69,27 @@
 
     <script>
 
-        const urlObtenerCategorias = "@Url.Action("ObtenerCategoria")";
+        const urlObtenerCategorias = '@Url.Action("ObtenerCategorias")';
 
-    $(fuction(){
-        $("TipoOperacionId").change(async function()){
-            const valorSeleccionado = $(this).val();
+        $(function(){
+            $("#TipoOperacion").change(async function(){
 
-            const respuesta = await fetch("urlObtenerCategorias", {
-                method: "post",
-                body: valorSeleccionado,
-                headers:{
-                    "content-type": "application/json"
-                }
-            });
-            const json = await respuesta.json();
-            const opciones = json.map(categoria => "<opcion value=${categoria.value}>${categoria.text}</option>");
-            $("#CategoriaId").html(opciones);
-        })
+                const valorSeleccionado = $(this).val();
+
+                const respuesta = await fetch(urlObtenerCategorias, {
+                    method: 'post',
+                    body: valorSeleccionado,
+                    headers:{
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const json = await respuesta.json();
+                const opciones = json.map(categorias => `<option value=${categorias.value}>${categorias.text}</option>`);
+                $("#CategoriaId").html(opciones);
+            })
     
-    })
+        })
     
     </script>
 }
