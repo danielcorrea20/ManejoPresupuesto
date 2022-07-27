@@ -7,9 +7,10 @@ namespace ManejoPresupuesto.Servicios
     public interface IRepositorioTransacciones
     {
         Task Actualizar(Transaccion transaccion, decimal montoAnterior, int cuentaAnterior);
+        Task Borrar(int id);
         Task Crear(Transaccion transaccion);
         Task<Transaccion> ObtenerPorId(int id, int usuarioId);
-        Task Borrar(int id);
+       
     }
     public class RepositorioTransacciones: IRepositorioTransacciones
     {
@@ -23,8 +24,8 @@ namespace ManejoPresupuesto.Servicios
         public async Task Crear(Transaccion transaccion)
         {
             using var connection = new SqlConnection(connectionstring);
-            var Id = await connection.QuerySingleAsync<int>("Transacciones_insertar", 
-                new { transaccion.UsuarioId, transaccion.FechaTransaccion, transaccion.Monto, 
+            var Id = await connection.QuerySingleAsync<int>("Transaciones_Insertar", 
+                new { transaccion.UsuarioId, transaccion.FechaTransacion, transaccion.Monto, 
                     transaccion.CategoriaId, transaccion.CuentaId, transaccion.Nota }, commandType: System.Data.CommandType.StoredProcedure);
 
             transaccion.Id = Id;
@@ -37,7 +38,7 @@ namespace ManejoPresupuesto.Servicios
                 new
                 {
                     transaccion.Id,
-                    transaccion.FechaTransaccion,
+                    transaccion.FechaTransacion,
                     transaccion.Monto,
                     transaccion.CategoriaId,
                     transaccion.CuentaId,
@@ -50,16 +51,26 @@ namespace ManejoPresupuesto.Servicios
         public async Task<Transaccion> ObtenerPorId(int id, int usuarioId)
         {
             using var connection = new SqlConnection(connectionstring);
-            return await connection.QueryFirstOrDefaultAsync<Transaccion>(@"select Transaciones. *, cat.TipoOperacionId
+            return await connection.QueryFirstOrDefaultAsync<Transaccion>(@"select Transaciones. *,
+                                                cat.TipoOperacionId
                                                 from Transaciones
                                                 inner join Categorias cat
                                                 on cat.Id = Transaciones.CategoriaId
-                                                where Transaciones.Id = @Id and Transaciones.UsuarioId = @UsuarioId");
+                                                where Transaciones.Id = @Id and 
+                                                Transaciones.UsuarioId = @UsuarioId",
+                                                new {id, usuarioId});
         }
 
-        public Task Borrar(int id)
+       
+
+        public async Task Borrar (int id)
         {
-            return null;
+            using var connection = new SqlConnection(connectionstring);
+            await connection.ExecuteAsync("Transaciones_Borrar", 
+                new {id}, commandType: System.Data.CommandType.StoredProcedure);
+
         }
+
     }
+
 }

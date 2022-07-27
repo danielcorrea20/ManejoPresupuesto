@@ -11,9 +11,9 @@
 
     </div>
     <div class="mb-3">
-        <label asp-for="FechaTransaccion" class="form-label"></label>
-        <input asp-for="FechaTransaccion" class="form-control" />
-        <span asp-validation-for="FechaTransaccion" class="text-danger">
+        <label asp-for="FechaTransacion" class="form-label"></label>
+        <input asp-for="FechaTransacion" class="form-control" />
+        <span asp-validation-for="FechaTransacion" class="text-danger">
 
         </span>
 
@@ -65,31 +65,16 @@
 
 @section Scripts {
     <partial name= "_ValidationScriptsPartial"/>
-
+    <script src="~/js/FormularioTransacciones.js" asp-append-version="true"></script>
 
     <script>
 
-        const urlObtenerCategorias = '@Url.Action("ObtenerCategorias")';
+        const urlObtenerCategorias = '@Url.Action("ObtenerCategoria")';
 
-        $(function(){
-            $("#TipoOperacion").change(async function(){
-
-                const valorSeleccionado = $(this).val();
-
-                const respuesta = await fetch(urlObtenerCategorias, {
-                    method: 'post',
-                    body: valorSeleccionado,
-                    headers:{
-                        'Content-Type': 'application/json'
-                    }
-                });
-
-                const json = await respuesta.json();
-                const opciones = json.map(categorias => `<option value=${categorias.value}>${categorias.text}</option>`);
-                $("#CategoriaId").html(opciones);
-            })
+    $(function(){
+        inicializarFormularioTransacciones(urlObtenerCategorias);
     
-        })
+    })
     
     </script>
 }

@@ -10,13 +10,13 @@
     <div asp-validation-summary="ModelOnly" class="text-danger">
     <input type="hidden" asp-for="Id"/>
     <input type="hidden" asp-for="MontoAnterior"/>
-    <input type="hidden" asp-for="CuentaAnterior"/>
+    <input type="hidden" asp-for="CuentaAnteriorId"/>
 
     </div>
     <div class="mb-3">
-        <label asp-for="FechaTransaccion" class="form-label"></label>
-        <input asp-for="FechaTransaccion" class="form-control" />
-        <span asp-validation-for="FechaTransaccion" class="text-danger">
+        <label asp-for="FechaTransacion" class="form-label"></label>
+        <input asp-for="FechaTransacion" class="form-control" />
+        <span asp-validation-for="FechaTransacion" class="text-danger">
 
         </span>
 
@@ -73,9 +73,9 @@
 
     <script>
 
-        const urlObtenerCategorias = "@Url.Action("ObtenerCategoria")";
+        const urlObtenerCategorias = '@Url.Action("ObtenerCategoria")';
 
-    $(fuction(){
+    $(function(){
         inicializarFormularioTransacciones(urlObtenerCategorias);
     
     })

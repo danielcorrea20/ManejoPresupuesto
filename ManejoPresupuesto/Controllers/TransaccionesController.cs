@@ -39,6 +39,34 @@ namespace ManejoPresupuesto.Controllers
 
 
         }
+        [HttpGet]
+        public async Task<IActionResult> Editar(int id)
+        {
+            var usuarioId = servicioUsuarios.ObtenerUsuarioId();
+            var transaccion = await repositorioTransacciones.ObtenerPorId(id, usuarioId);
+
+            if (transaccion is null)
+            {
+                return RedirectToAction ("NoEncontrado", "Home");
+            }
+            var modelo = mapper.Map<TransaccionActualizacionViewModel>(transaccion);
+
+            modelo.MontoAnterior = modelo.Monto * -1;
+            
+            if (modelo.TipoOperacion == TipoOperacion.Gasto)
+            {
+                modelo.MontoAnterior = modelo.Monto * -1;
+
+            }
+
+            modelo.CuentaAnteriorId = transaccion.CuentaId;
+            modelo.Categorias = await ObtenerCategorias(usuarioId, transaccion.TipoOperacion);
+            modelo.Cuentas = await ObtenerCuentas(usuarioId);
+
+            return View(modelo);
+
+        }
+
         [HttpPost]
         public async Task<IActionResult> Editar(TransaccionActualizacionViewModel modelo)
         {
@@ -66,11 +94,13 @@ namespace ManejoPresupuesto.Controllers
 
             var transaccion = mapper.Map<Transaccion>(modelo);
 
+            
+             
             if (modelo.TipoOperacion == TipoOperacion.Gasto)
             {
                 transaccion.Monto *= -1;
             }
-            await repositorioTransacciones.Actualizar(transaccion, modelo.MontoAnterior, modelo.CuentaAnterior);
+            await repositorioTransacciones.Actualizar(transaccion, modelo.MontoAnterior, modelo.CuentaAnteriorId);
 
             return RedirectToAction("Index");
         }
@@ -152,40 +182,7 @@ namespace ManejoPresupuesto.Controllers
 
         }
 
-        [HttpPost]
-
-        public async Task<IActionResult> Editar(int id)
-        {
-            var usuarioId = servicioUsuarios.ObtenerUsuarioId();
-            var transaccion = await repositorioTransacciones.ObtenerPorId(id, usuarioId);
-
-            if (transaccion is null)
-            {
-                return RedirectToAction("NoEncontrado", "Home");
-            }
-
-            var modelo = mapper.Map<TransaccionActualizacionViewModel>(transaccion);
-
-            modelo.MontoAnterior = modelo.Monto;
-
-
-            if (modelo.TipoOperacion == TipoOperacion.Gasto)
-            {
-
-                modelo.MontoAnterior = modelo.Monto * -1;
-
-            }
-            modelo.CuentaAnterior = transaccion.CuentaId;
-            modelo.Categorias = await ObtenerCategorias(usuarioId, transaccion.TipoOperacion);
-            modelo.Cuentas = await ObtenerCuentas(usuarioId);
-
-            return View(modelo);
-
-
-        }
-
-
-
+        
 
     }
 }
