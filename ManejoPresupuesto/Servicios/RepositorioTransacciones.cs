@@ -11,7 +11,10 @@ namespace ManejoPresupuesto.Servicios
         Task Crear(Transaccion transaccion);
         Task<IEnumerable<Transaccion>> ObtenerPorCuentaId(ObtenerTransaccionesPorCuenta modelo);
         Task<Transaccion> ObtenerPorId(int id, int usuarioId);
-       
+        Task<IEnumerable<Transaccion>> ObtenerPorUsuarioId(ParametroObtenerTransaccionesPorUsuario modelo);
+        Task ObtenerPorCuentaId(ParametroObtenerTransaccionesPorUsuario parametro);
+        Task<IEnumerable<ResultadoObtenerPorSemana>> ObtenerPorSemana(ParametroObtenerTransaccionesPorUsuario modelo);
+        Task<IEnumerable<ResultadoObtenerPorMes>> ObtenerPorMes(int usuarioId, int año);
     }
     public class RepositorioTransacciones: IRepositorioTransacciones
     {
@@ -87,6 +90,51 @@ namespace ManejoPresupuesto.Servicios
                                     @FechaInicio and @FechaFin", modelo);
         }
 
+        public async Task<IEnumerable<Transaccion>> ObtenerPorUsuarioId(ParametroObtenerTransaccionesPorUsuario modelo)
+        {
+            using var connection = new SqlConnection(connectionstring);
+            return await connection.QueryAsync<Transaccion>
+                                (@"select t.Id, t.Monto, t.FechaTransacion, c.Nombre as Categoria, cu.Nombre as Cuenta, c.TipoOperacionId, Nota
+                                    from Transaciones t
+                                    inner join categorias c
+                                    on c.Id = t.CategoriaId
+                                    inner join cuentas cu
+                                    on cu.Id = t.CuentaId
+                                    where t.UsuarioId = @UsuarioId  
+                                    and FechaTransacion between 
+                                    @FechaInicio and @FechaFin
+                                    order by t.FechaTransacion desc", modelo);
+        }
+
+        public Task ObtenerPorCuentaId(ParametroObtenerTransaccionesPorUsuario parametro)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<IEnumerable<ResultadoObtenerPorSemana>> ObtenerPorSemana(ParametroObtenerTransaccionesPorUsuario modelo)
+        {
+            using var connection = new SqlConnection(connectionstring);
+            return await connection.QueryAsync<ResultadoObtenerPorSemana>(@"select datediff (d, @fechaInicio, FechaTransacion) /7 + 1 as Semana,
+                                sum(Monto) as Monto, cat.TipoOperacionId
+                                from Transaciones
+                                inner join categorias cat
+                                on cat.Id = Transaciones.CategoriaId
+                                where Transaciones.UsuarioId = @usuarioId and
+                                FechaTransacion between @fechaInicio and @fechaFin
+                                group by datediff(d, @fechaInicio, FechaTransacion) / 7, cat.TipoOperacionId", modelo);
+        }
+
+        public async Task<IEnumerable<ResultadoObtenerPorMes>> ObtenerPorMes(int usuarioId, int año)
+        {
+            using var connection = new SqlConnection(connectionstring);
+            return await connection.QueryAsync<ResultadoObtenerPorMes>(@"select MONTH(FechaTransacion) as Mes,
+                                                                        sum(Monto) as Monto, cat.TipoOperacionId
+                                                                        from Transaciones
+                                                                        inner join Categorias cat
+                                                                        on cat.Id = Transaciones.CategoriaId
+                                                                        where Transaciones.UsuarioId = @usuarioId and year(FechaTransacion) = @Año
+                                                                        Group by MONTH(FechaTransacion), cat.TipoOperacionId", new {usuarioId, año});
+        }
     }
 
 }
