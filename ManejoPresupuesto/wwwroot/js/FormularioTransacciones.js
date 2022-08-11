@@ -1,7 +1,8 @@
 ﻿function inicializarFormularioTransacciones(urlObtenerCategorias) {
-    $("TipoOperacionId").change(async function (){
+    $("#TipoOperacion").change(async function (){
         const valorSeleccionado = $(this).val();
-
+        alert(valorSeleccionado);
+        alert(urlObtenerCategorias);
         const respuesta = await fetch("urlObtenerCategorias", {
             method: "post",
             body: valorSeleccionado,

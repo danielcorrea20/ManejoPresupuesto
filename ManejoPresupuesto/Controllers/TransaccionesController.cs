@@ -38,6 +38,7 @@ namespace ManejoPresupuesto.Controllers
             var modelo = await servicioReportes.ObtenerReporteTransaccionesDetalladas(usuarioId, mes, año, ViewBag);
             return View(modelo);
         }
+        
         public async Task<IActionResult> Crear()
         {
             var usuarioId = servicioUsuarios.ObtenerUsuarioId();
