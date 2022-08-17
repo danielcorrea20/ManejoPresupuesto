@@ -8,17 +8,17 @@
 <h5>Una transacción te permite indicar tus ingresos y gastos</h5>
 
 <form asp-action="Editar">
-    <div asp-validation-summary="ModelOnly" class="text-danger">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <input type="hidden" asp-for="Id"/>
     <input type="hidden" asp-for="UrlRetorno"/>
     <input type="hidden" asp-for="MontoAnterior"/>
     <input type="hidden" asp-for="CuentaAnteriorId"/>
 
-    </div>
+    
     <div class="mb-3">
-        <label asp-for="FechaTransacion" class="form-label"></label>
-        <input asp-for="FechaTransacion" class="form-control" />
-        <span asp-validation-for="FechaTransacion" class="text-danger">
+        <label asp-for="FechaTransaccion" class="form-label"></label>
+        <input asp-for="FechaTransaccion" class="form-control" />
+        <span asp-validation-for="FechaTransaccion" class="text-danger">
 
         </span>
 
@@ -39,7 +39,7 @@
 
     <div class="mb-3">
         <label asp-for="CategoriaId" class="form-label"></label>
-        <select asp-for="CategoriaId"   class="form-select"></select>
+        <select asp-for="CategoriaId" asp-items="Model.Categorias" class="form-select"></select>
         <span asp-validation-for="CategoriaId" class="text-danger"></span>
 
     </div>
@@ -75,7 +75,7 @@
 
     <script>
 
-        const urlObtenerCategorias = '@Url.Action("ObtenerCategoria")';
+        const urlObtenerCategorias = '@Url.Action("ObtenerCategorias")';
 
     $(function(){
         inicializarFormularioTransacciones(urlObtenerCategorias);

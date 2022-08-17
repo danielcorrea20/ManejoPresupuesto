@@ -41,7 +41,7 @@ namespace ManejoPresupuesto.Servicios
                                          from Categorias 
                                          where UsuarioId=@usuarioId
                                          order by Nombre
-                                         offset {paginacion.RecordsASaltar} rows fetch next {paginacion.RecordsPoPagina} 
+                                         offset {paginacion.RecordsASaltar} rows fetch next {paginacion.RecordsPorPagina} 
                                          rows only"
                                          , new {usuarioId});
         }

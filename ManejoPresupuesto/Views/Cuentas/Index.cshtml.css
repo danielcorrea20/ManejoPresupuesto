@@ -11,7 +11,7 @@
         width: 100%;
     }
 
-acordeon-cuentas ul li {
+.acordeon-cuentas ul li {
     display: flex;
     justify-content: space-between;
 }

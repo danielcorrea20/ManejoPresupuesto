@@ -61,7 +61,7 @@ namespace ManejoPresupuesto.Controllers
             }
             var modelo = mapper.Map<TransaccionActualizacionViewModel>(transaccion);
 
-            modelo.MontoAnterior = modelo.Monto * -1;
+            modelo.MontoAnterior = modelo.Monto;
 
             if (modelo.TipoOperacion == TipoOperacion.Gasto)
             {
@@ -212,8 +212,8 @@ namespace ManejoPresupuesto.Controllers
             var eventosCalendario = transacciones.Select(transaccion => new EventoCalendario()
             {
                 Title = transaccion.Monto.ToString("N"),
-                Start = transaccion.FechaTransacion.ToString("yyyy-MM-dd"),
-                End = transaccion.FechaTransacion.ToString("yyyy-MM-dd"),
+                Start = transaccion.FechaTransaccion.ToString("yyyy-MM-dd"),
+                End = transaccion.FechaTransaccion.ToString("yyyy-MM-dd"),
                 Color = (transaccion.TipoOperacion == TipoOperacion.Gasto) ? "Red" : null
             });
             return Json(eventosCalendario);
@@ -266,7 +266,7 @@ namespace ManejoPresupuesto.Controllers
 
             foreach (var transaccion in transaccions)
             {
-                dataTable.Rows.Add(transaccion.FechaTransacion,
+                dataTable.Rows.Add(transaccion.FechaTransaccion,
                     transaccion.Cuenta,
                     transaccion.Categoria,
                     transaccion.Nota,
@@ -328,7 +328,7 @@ namespace ManejoPresupuesto.Controllers
 
         }
 
-
+        [HttpPost]
         public async Task<IActionResult> Editar(TransaccionActualizacionViewModel modelo)
         {
             var ususarioId = servicioUsuarios.ObtenerUsuarioId();
@@ -410,7 +410,7 @@ namespace ManejoPresupuesto.Controllers
                 modelo.Categorias = await ObtenerCategorias(usuarioId, modelo.TipoOperacion);
                 return View(modelo);
             }
-            var cuenta = await repositoriocategorias.ObtenerPorId(modelo.CuentaId, usuarioId);
+            var cuenta = await repositorioCuentas.ObtenerPorId(modelo.CuentaId, usuarioId);
 
             if (cuenta is null)
             {

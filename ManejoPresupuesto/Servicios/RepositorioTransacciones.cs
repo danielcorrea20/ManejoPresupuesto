@@ -29,7 +29,7 @@ namespace ManejoPresupuesto.Servicios
         {
             using var connection = new SqlConnection(connectionstring);
             var Id = await connection.QuerySingleAsync<int>("Transaciones_Insertar", 
-                new { transaccion.UsuarioId, transaccion.FechaTransacion, transaccion.Monto, 
+                new { transaccion.UsuarioId, transaccion.FechaTransaccion, transaccion.Monto, 
                     transaccion.CategoriaId, transaccion.CuentaId, transaccion.Nota }, commandType: System.Data.CommandType.StoredProcedure);
 
             transaccion.Id = Id;
@@ -42,7 +42,7 @@ namespace ManejoPresupuesto.Servicios
                 new
                 {
                     transaccion.Id,
-                    transaccion.FechaTransacion,
+                    transaccion.FechaTransaccion,
                     transaccion.Monto,
                     transaccion.CategoriaId,
                     transaccion.CuentaId,
@@ -56,8 +56,8 @@ namespace ManejoPresupuesto.Servicios
         {
             using var connection = new SqlConnection(connectionstring);
             return await connection.QueryFirstOrDefaultAsync<Transaccion>(@"select Transaciones. *,
-                                                cat.TipoOperacionId
-                                                from Transaciones
+                                                cat.TipoOperacionId as TipoOperacion
+                                                from Transaciones 
                                                 inner join Categorias cat
                                                 on cat.Id = Transaciones.CategoriaId
                                                 where Transaciones.Id = @Id and 
@@ -94,7 +94,7 @@ namespace ManejoPresupuesto.Servicios
         {
             using var connection = new SqlConnection(connectionstring);
             return await connection.QueryAsync<Transaccion>
-                                (@"select t.Id, t.Monto, t.FechaTransacion, c.Nombre as Categoria, cu.Nombre as Cuenta, c.TipoOperacionId, Nota
+                                (@"select t.Id, t.Monto, t.FechaTransacion, c.Nombre as Categoria, cu.Nombre as Cuenta, c.TipoOperacionId as TipoOperacion, Nota
                                     from Transaciones t
                                     inner join categorias c
                                     on c.Id = t.CategoriaId
@@ -115,7 +115,7 @@ namespace ManejoPresupuesto.Servicios
         {
             using var connection = new SqlConnection(connectionstring);
             return await connection.QueryAsync<ResultadoObtenerPorSemana>(@"select datediff (d, @fechaInicio, FechaTransacion) /7 + 1 as Semana,
-                                sum(Monto) as Monto, cat.TipoOperacionId
+                                sum(Monto) as Monto, cat.TipoOperacionId as TipoOperacion
                                 from Transaciones
                                 inner join categorias cat
                                 on cat.Id = Transaciones.CategoriaId
@@ -128,7 +128,7 @@ namespace ManejoPresupuesto.Servicios
         {
             using var connection = new SqlConnection(connectionstring);
             return await connection.QueryAsync<ResultadoObtenerPorMes>(@"select MONTH(FechaTransacion) as Mes,
-                                                                        sum(Monto) as Monto, cat.TipoOperacionId
+                                                                        sum(Monto) as Monto, cat.TipoOperacionId as TipoOperacion
                                                                         from Transaciones
                                                                         inner join Categorias cat
                                                                         on cat.Id = Transaciones.CategoriaId

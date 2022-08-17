@@ -106,8 +106,8 @@ namespace ManejoPresupuesto.Servicios
             var modelo = new ReporteTransaccionesDetalladas();
 
 
-            var transaccionesPorFecha = transacciones.OrderByDescending(x => x.FechaTransacion)
-                .GroupBy(x => x.FechaTransacion)
+            var transaccionesPorFecha = transacciones.OrderByDescending(x => x.FechaTransaccion)
+                .GroupBy(x => x.FechaTransaccion)
                 .Select(grupo => new ReporteTransaccionesDetalladas.TransaccionesPorFecha()
                 {
                     FechaTransaccion = grupo.Key,

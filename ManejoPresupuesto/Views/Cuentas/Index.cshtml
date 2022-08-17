@@ -34,12 +34,14 @@
     <div>
         <div>
             <strong>Pasivos</strong>
-            <div class="pasivo">
-                 @FormatearBalance(Model.Where(x => x.Balance < 0).Sum(x => x.Balance))
-        </div>
+            <div class="pasivos">
+                @FormatearBalance(Model.Where(x => x.Balance < 0).Sum(x => x.Balance))
+                 
             </div>
+        </div>
             
     </div>
+   
     <div>
         <div>
             <strong>Total</strong>
@@ -51,7 +53,7 @@
     </div>
 </div>
 
-<div class="accordion acordeon cuentas">
+<div class="accordion acordeon-cuentas">
     @foreach (var tipoCuenta in Model)
     {
         <div class= "accordion-item">
