@@ -6,7 +6,7 @@
 
 <div id="calendario"></div>
 
-@*<div class="modal fade" id="modalTransacciones" tabindex="-1">
+<div class="modal fade" id="modalTransacciones" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
@@ -34,7 +34,7 @@
         </div>
     </div>
 
-</div>*@
+</div>
 
 
 @section Scripts{
@@ -48,64 +48,86 @@
             const calendario = new FullCalendar.Calendar(calendarioEl, {
                 dayMaxEventRows: 3,
                 initialView: 'dayGridMonth',
-                events: '/transacciones/ObtenerTransaccionesCalendario'
-        //        dateClick: async function(info) {
-        //            await buscarTransaccionesPorFecha(info.dateStr);
+                events: '/transacciones/ObtenerTransaccionesCalendario',
+                dateClick: async function(info) {
+                    
+                    await buscarTransaccionesPorFecha(info.dateStr);
+                    }
                 });
 
             calendario.render();
 
         });
 
-        //async function buscarTransaccionesPorFecha(fecha) {
-        //    const response = await fetch(`/transacciones/ObtenerTransaccionesPorFecha?fecha=${fecha}`, {
+        async function buscarTransaccionesPorFecha(fecha) {
+            const response = await fetch(`/transacciones/ObtenerTransaccionesPorFecha?fecha=${fecha}`, {
 
-        //        method: 'GET',
-        //        headers: {
-        //            'Content-Type': 'application/json'
-        //        }
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
 
-        //    });
+            });
 
-        //    const json = await response.json();
+            const json = await response.json();
+            
 
-        //    let ingresos = 0;
-        //    let gastos = 0;
-        //    const tipoOperacionesIngresos = 1;
+        
 
-        //    const formateador = new Intl.NumberFormat('en-US', {
-        //        style: 'currency',
-        //        currency: 'USD'
-        //    });
+        //Aqui empieza la segunda parte
 
-        //    const filas = json.map(transaccion => {
 
-        //        if (transaccion.tipoOperacion === tipoOperacionesIngresos) {
-        //            ingresos += transacciones.monto;
-        //        } else {
-        //            gastos += transacciones.monto;
-        //        }
+            //-----------------------------------FALLA ALGO-----------------------------------------
+        
+        
+            let ingresos = 0;
+            let gastos = 0;
+            const tipoOperacionesIngresos = 1;
 
-        //        return `<tr>
-        //            <td>${transaccion.categoria}</td>
-        //            <td>${transaccion.cuenta}</td>
-        //            <td align="right" colspan="2" 
-        //            class=${transaccion.tipoOperacion === tipoOperacionesIngresos ? 'activo' : 'pasivo'}>
-        //            ${formateador.format(transaccion.monto)}</td>
-        //        </tr>`;
+            const formateador = new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD'
+            });
+            //------------------------------------------------------------------------------
 
-        //    });
+            const filas = json.map(transaccion => {
 
-        //    $("#modalTablaCuerpo").html(filas);
-        //    $("#modalTablaIngresos").html(formateador.format(ingresos));
-        //    $("#modalTablaGastos").html(formateador.format(gastos));
-        //    $("#modalTablaFecha").html(fecha);
+                if (transaccion.tipoOperacion === tipoOperacionesIngresos) {
+                    ingresos += transaccion.monto;
+                } else {
+                    gastos += transaccion.monto;
+                }
 
-        //    const modalTransacciones = new bootstrap.Modal(document.getElementById('modalTransacciones'));
+                return `<tr>
+                    <td>${transaccion.categoria}</td>
+                    <td>${transaccion.cuenta}</td>
+                    <td align="right" colspan="2" 
+                    class=${transaccion.tipoOperacion === tipoOperacionesIngresos ? 'activo' : 'pasivo'}>
+                    ${formateador.format(transaccion.monto)}</td>
+                </tr>`;
 
-        //    modalTransacciones.show();
-        //}
+            });
 
+            
+            
+            
+            
+            $("#modalTablaCuerpo").html(filas);
+            $("#modalTablaIngresos").html(formateador.format(ingresos));
+            $("#modalTablaGastos").html(formateador.format(gastos));
+            $("#modalTablaFecha").html(fecha);
+
+            
+           //---------------------------------HASTA AQUI-----------------------------
+            
+            
+            
+            
+            const modalTransacciones = new bootstrap.Modal(document.getElementById('modalTransacciones'));
+
+            modalTransacciones.show();
+        
+        }
 
 
 
