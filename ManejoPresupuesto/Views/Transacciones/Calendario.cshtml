@@ -6,7 +6,7 @@
 
 <div id="calendario"></div>
 
-<div class="modal fade" id="modalTransacciones" tabindex="-1">
+@*<div class="modal fade" id="modalTransacciones" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
@@ -29,12 +29,12 @@
                 </table>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modla">Cerrar</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
             </div>
         </div>
     </div>
 
-</div>
+</div>*@
 
 
 @section Scripts{
@@ -43,31 +43,31 @@
 
 
     <script>
-        document.addEventListener("DOMContentLoaded", function(){
+        document.addEventListener("DOMContentLoaded", function() {
             const calendarioEl = document.getElementById('calendario');
             const calendario = new FullCalendar.Calendar(calendarioEl, {
                 dayMaxEventRows: 3,
                 initialView: 'dayGridMonth',
                 events: '/transacciones/ObtenerTransaccionesCalendario'
-                //dateClick: async function(info) {
-                //    await buscarTransaccionesPorFecha(info.dateStr);
-            });
-             
+        //        dateClick: async function(info) {
+        //            await buscarTransaccionesPorFecha(info.dateStr);
+                });
+
             calendario.render();
 
-        })
-         
+        });
+
         //async function buscarTransaccionesPorFecha(fecha) {
-        //    const response = await fetch(`/transacciones/obtenerTransaccionesPorFecha?fecha=${fecha}`, {
+        //    const response = await fetch(`/transacciones/ObtenerTransaccionesPorFecha?fecha=${fecha}`, {
 
         //        method: 'GET',
-        //        Headers: {
+        //        headers: {
         //            'Content-Type': 'application/json'
         //        }
 
         //    });
 
-        //    const jason = await responde.json();
+        //    const json = await response.json();
 
         //    let ingresos = 0;
         //    let gastos = 0;
@@ -87,10 +87,12 @@
         //        }
 
         //        return `<tr>
-        //                                        <td>${transaccion.categoria}</td>
-        //                                        <td>${transaccion.cuenta}</td>
-        //                                        <td align="right" colspan="2" class=${transaccion.tipoOperacion === tipoOperacionesIngresos ? 'activo' : 'pasivo'}>${formateador.format(transaccion.monto)}</td>
-        //                                        </tr>`;
+        //            <td>${transaccion.categoria}</td>
+        //            <td>${transaccion.cuenta}</td>
+        //            <td align="right" colspan="2" 
+        //            class=${transaccion.tipoOperacion === tipoOperacionesIngresos ? 'activo' : 'pasivo'}>
+        //            ${formateador.format(transaccion.monto)}</td>
+        //        </tr>`;
 
         //    });
 

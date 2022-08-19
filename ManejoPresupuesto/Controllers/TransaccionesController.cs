@@ -205,8 +205,8 @@ namespace ManejoPresupuesto.Controllers
                 new ParametroObtenerTransaccionesPorUsuario
                 {
                     UsuarioId = usuarioId,
-                    FechaFin = start,
-                    FechaInicio = end
+                    FechaFin = end,
+                    FechaInicio = start
                 });
 
             var eventosCalendario = transacciones.Select(transaccion => new EventoCalendario()
